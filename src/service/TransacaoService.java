@@ -125,6 +125,39 @@ public class TransacaoService {
         return receitas.subtract(despesas);
     }
 
+    private List<Transacao> buscarTransacoesDoUsuario(Long usuarioId){
+        Usuario usuario = usuarioRepository.findById(usuarioId);
+        return transacaoRepository.findByUsuario(usuario);
+    }
+
+    public BigDecimal totalReceitasUsuario(Long usuarioId){
+        BigDecimal totalReceitasUsuario = BigDecimal.ZERO;
+        List<Transacao> transacoes = buscarTransacoesDoUsuario(usuarioId);
+
+        for(Transacao transacao : transacoes) {
+            if (transacao.getCategoria().getTipo().equals(TipoCategoria.RECEITA)) {
+                totalReceitasUsuario = totalReceitasUsuario.add(transacao.getValor());
+            }
+        }
+        return totalReceitasUsuario;
+    }
+
+    public BigDecimal totalDespesasUsuario(Long usuarioId){
+        BigDecimal totalDespesasUsuario = BigDecimal.ZERO;
+        List<Transacao> transacoes = buscarTransacoesDoUsuario(usuarioId);
+
+        for(Transacao transacao : transacoes){
+            if(transacao.getCategoria().getTipo().equals(TipoCategoria.DESPESA)) {
+                totalDespesasUsuario = totalDespesasUsuario.add(transacao.getValor());
+            }
+        }
+        return totalDespesasUsuario;
+    }
+
+    public BigDecimal saldoAtualUsuario(Long usuarioId){
+        return  totalReceitasUsuario(usuarioId).subtract(totalDespesasUsuario(usuarioId));
+    }
+
 
 
 

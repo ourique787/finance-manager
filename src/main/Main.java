@@ -37,6 +37,7 @@ public class Main {
             System.out.println("3 - Criar Categoria");
             System.out.println("4 - Criar Transação");
             System.out.println("5 - Listar Transação");
+            System.out.println("6 - Resumo do Usuário");
             System.out.println("0 - Sair");
 
             int opcao = scanner.nextInt();
@@ -150,6 +151,18 @@ public class Main {
                             break;
                         default:
                             System.out.println("Opção inválida! Digite uma opção válida");
+                    }
+                    break;
+                case 6:
+                    System.out.println("Digite o id do Usuário:");
+                    Long id = scanner.nextLong();
+                    scanner.nextLine();
+                    if(usuarioService.buscarPorId(id) != null){
+                        System.out.println("Total receitas " + transacaoService.totalReceitasUsuario(id));
+                        System.out.println("Total despesas " + transacaoService.totalDespesasUsuario(id));
+                        System.out.println("Total saldo do usuário " + transacaoService.saldoAtualUsuario(id));
+                    } else{
+                        throw new IllegalArgumentException("Id inválido/nulo");
                     }
                     break;
                 case 0:
