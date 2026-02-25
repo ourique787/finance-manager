@@ -1,6 +1,7 @@
 package service;
 
 import model.Categoria;
+import model.TipoCategoria;
 import model.Transacao;
 import model.Usuario;
 import repository.CategoriaRepository;
@@ -91,5 +92,41 @@ public class TransacaoService {
         }
         return transacaoRepository.findByCategoria(categoria);
     }
+
+    //métodos para o total de receitas, despesas e saldototal do sistema de modo geral.
+
+    public BigDecimal totalReceitas(){
+        BigDecimal totalReceitas = BigDecimal.ZERO;
+        List<Transacao> transacoes = transacaoRepository.findAll();
+
+        for(Transacao t : transacoes){
+            if(t.getCategoria().getTipo().equals(TipoCategoria.RECEITA)){
+                totalReceitas = totalReceitas.add(t.getValor());
+            }
+        }
+        return totalReceitas; // Refatorar usando Streams
+    }
+
+    public BigDecimal totalDespesas(){
+        BigDecimal totalDespesas = BigDecimal.ZERO;
+        List<Transacao> transacoes = transacaoRepository.findAll();
+
+        for(Transacao t : transacoes){
+            if(t.getCategoria().getTipo().equals(TipoCategoria.DESPESA)){
+                totalDespesas = totalDespesas.add(t.getValor());
+            }
+        }
+        return totalDespesas;
+    }
+
+    public BigDecimal calcularSaldoAtual(){
+        BigDecimal receitas = totalReceitas();
+        BigDecimal despesas = totalDespesas();
+        return receitas.subtract(despesas);
+    }
+
+
+
+
 
 }
