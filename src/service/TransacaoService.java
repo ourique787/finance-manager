@@ -9,6 +9,9 @@ import repository.TransacaoRepository;
 import repository.UsuarioRepository;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class TransacaoService {
@@ -157,6 +160,71 @@ public class TransacaoService {
     public BigDecimal saldoAtualUsuario(Long usuarioId){
         return  totalReceitasUsuario(usuarioId).subtract(totalDespesasUsuario(usuarioId));
     }
+
+
+    public List<Transacao> filtarPorMesEAno(int mes, int ano){
+        List<Transacao> transacoes = transacaoRepository.findAll();
+        List<Transacao> filtrados = new ArrayList<>();
+        for(Transacao t : transacoes){
+            if(t.getData().getMonthValue() == mes && t.getData().getYear() == ano){
+                filtrados.add(t);
+            }
+        }
+        return filtrados;
+    }
+
+    public List<Transacao> filtrarPorMes(int mes){
+        List<Transacao> transacoes = transacaoRepository.findAll();
+        List<Transacao> filtrados = new ArrayList<>();
+        for(Transacao t : transacoes){
+            if(t.getData().getMonthValue() == mes){
+                filtrados.add(t);
+            }
+        }  return filtrados;
+    }
+
+    public List<Transacao> filtrarPorAno(int ano){
+        List<Transacao> transacoes = transacaoRepository.findAll();
+        List<Transacao> filtrados = new ArrayList<>();
+        for(Transacao t : transacoes){
+            if(t.getData().getYear() == ano){
+                filtrados.add(t);
+            }
+        } return filtrados;
+    }
+
+    public List<Transacao> filtrarPorCategoria(Long categoriaId){
+        Categoria categoria = categoriaRepository.findById(categoriaId);
+        return transacaoRepository.findByCategoria(categoria);
+    }
+
+    public List<Transacao> ordenarPorValorCrescente(){
+        List<Transacao> transacoes = transacaoRepository.findAll();
+        List<Transacao> filtrados = new ArrayList<>(transacoes);
+        filtrados.sort(new Comparator<Transacao>() {
+            @Override
+            public int compare(Transacao transacao, Transacao t1) {
+                return transacao.getValor().compareTo(t1.getValor());
+            }
+        });
+        return filtrados;
+    }
+
+    public List<Transacao> ordenarPorValorDecrescente(){
+        List<Transacao> transacoes = transacaoRepository.findAll();
+        List<Transacao> filtrados = new ArrayList<>(transacoes);
+        filtrados.sort(new Comparator<Transacao>() {
+            @Override
+            public int compare(Transacao transacao, Transacao t1) {
+                return t1.getValor().compareTo(transacao.getValor());
+            }
+        });
+        return filtrados;
+    }
+
+
+
+
 
 
 
