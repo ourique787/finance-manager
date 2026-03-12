@@ -38,6 +38,7 @@ public class Main {
             System.out.println("4 - Criar Transação");
             System.out.println("5 - Listar Transação");
             System.out.println("6 - Resumo do Usuário");
+            System.out.println("7 - Filtros e Transações");
             System.out.println("0 - Sair");
 
             int opcao = scanner.nextInt();
@@ -165,6 +166,70 @@ public class Main {
                         throw new IllegalArgumentException("Id inválido/nulo");
                     }
                     break;
+                case 7:
+                    System.out.println("1 - Filtrar por mês");
+                    System.out.println("2 - Filtrar por ano");
+                    System.out.println("3 - Filtrar por mês e ano");
+                    System.out.println("4 - Filtrar por categoria");
+                    System.out.println("5 - Ordenar por valor crescente");
+                    System.out.println("6 - Ordenar por valor decrescente");
+
+                    subOpcao = scanner.nextInt();
+                    scanner.nextLine();
+
+                    switch (subOpcao){
+                        case 1:
+                            System.out.println("Digite o mês:");
+                            int mes = scanner.nextInt();
+                            scanner.nextLine();
+                            List<Transacao> transacaoMes = transacaoService.filtrarPorMes(mes);
+                            for(Transacao transacao : transacaoMes){
+                                System.out.println(transacao);
+                            }
+                            break;
+                        case 2:
+                            System.out.println("Digite o ano:");
+                            int ano = scanner.nextInt();
+                            scanner.nextLine();
+                            List<Transacao> transacoesAno = transacaoService.filtrarPorAno(ano);
+                            for(Transacao transacao : transacoesAno){
+                                System.out.println(transacao);
+                            }
+                            break;
+                        case 3:
+                            System.out.println("Digite o mes");
+                            int mes2 = scanner.nextInt();
+                            scanner.nextLine();
+                            System.out.println("Digite o ano");
+                            int ano2 = scanner.nextInt();
+                            scanner.nextLine();
+                            List<Transacao> transacoesMesAno = transacaoService.filtarPorMesEAno(mes2, ano2);
+                            for(Transacao transacao : transacoesMesAno){
+                                System.out.println(transacao);
+                            }
+                            break;
+                        case 4:
+                            System.out.println("Digite o id da categoria:");
+                            Long categoriaIdFiltro = scanner.nextLong();
+                            scanner.nextLine();
+                            List<Transacao> filtroCategoria = transacaoService.filtrarPorCategoria(categoriaIdFiltro);
+                            for(Transacao transacao : filtroCategoria){
+                                System.out.println(transacao);
+                            }
+                            break;
+                        case 5:
+                            List<Transacao> transacoesCrescente = transacaoService.ordenarPorValorCrescente();
+                            for(Transacao transacao : transacoesCrescente){
+                                System.out.println(transacao);
+                            }
+                            break;
+                        case 6:
+                            List<Transacao> transacoesDescrescente = transacaoService.ordenarPorValorDecrescente();
+                            for(Transacao transacao : transacoesDescrescente){
+                                System.out.println(transacao);
+                            }
+                            break;
+                    }
                 case 0:
                     continuar = false;
             }
