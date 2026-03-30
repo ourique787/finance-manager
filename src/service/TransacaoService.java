@@ -9,10 +9,8 @@ import repository.TransacaoRepository;
 import repository.UsuarioRepository;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class TransacaoService {
 
@@ -220,6 +218,12 @@ public class TransacaoService {
             }
         });
         return filtrados;
+    }
+
+    public Map<TipoCategoria, List<Transacao>> groupingByCategoria(){
+        return transacaoRepository.findAll()
+                .stream()
+                .collect(Collectors.groupingBy(t -> t.getCategoria().getTipo()));
     }
 
 

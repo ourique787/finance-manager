@@ -13,6 +13,7 @@ import service.UsuarioService;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 
@@ -39,6 +40,7 @@ public class Main {
             System.out.println("5 - Listar Transação");
             System.out.println("6 - Resumo do Usuário");
             System.out.println("7 - Filtros e Transações");
+            System.out.println("8 - Relatório por categoria");
             System.out.println("0 - Sair");
 
             int opcao = scanner.nextInt();
@@ -229,7 +231,27 @@ public class Main {
                                 System.out.println(transacao);
                             }
                             break;
+                    } break;
+                case 8:
+                    Map<TipoCategoria, List<Transacao>> mapa = transacaoService.groupingByCategoria();
+                    System.out.println("Tamanho do mapa: " + mapa.size());
+                    for (Map.Entry<TipoCategoria, List<Transacao>> entry : mapa.entrySet()) {
+
+                        System.out.println("Categoria " + entry.getKey());
+                        System.out.println("-----------");
+
+                        BigDecimal total = BigDecimal.ZERO;
+
+                        for (Transacao transacao : entry.getValue()) {
+                            System.out.println(transacao);
+                            total = total.add(transacao.getValor());
+                        }
+
+                        System.out.println("Total: " +total);
+                        System.out.println();
                     }
+                    break;
+
                 case 0:
                     continuar = false;
             }
